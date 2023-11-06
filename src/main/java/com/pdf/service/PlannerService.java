@@ -7,6 +7,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -32,11 +36,13 @@ public class PlannerService {
 	
 	public void uploadAndStoreFile(MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
-
+//originalFilename.endsWith(".xls") 
         if (originalFilename != null) {
-            if (originalFilename.endsWith(".xls") || originalFilename.endsWith(".xlsx")) {
+            if (originalFilename.endsWith(".xlsx")) {
                 uploadAndStoreExcel(file.getInputStream());
-            } else if (originalFilename.endsWith(".csv")) {
+            } else if (originalFilename.endsWith(".xls")) {
+            	uploadAndStoreXlsFormat(file.getInputStream());
+			} else if (originalFilename.endsWith(".csv")) {
                 uploadAndStoreCSV(file.getInputStream());
             } else {
                 throw new IllegalArgumentException("Unsupported file format. Supported formats are .xls, .xlsx, and .csv.");
@@ -45,7 +51,7 @@ public class PlannerService {
             throw new IllegalArgumentException("Invalid file.");
         }
     }
-
+//1- upload the file in .xlsx format
     private void uploadAndStoreExcel(InputStream fileInputStream) throws IOException {
         List<Planner> planners = parseExcel(fileInputStream);
         plannerRepository.saveAll(planners);
@@ -187,6 +193,131 @@ public class PlannerService {
             return planners;
         }
     }
+    
+    public void uploadAndStoreXlsFormat(InputStream fileInputStream) throws IOException {
+        List<Planner> planners = parseXlsFormat(fileInputStream);
+        plannerRepository.saveAll(planners);
+    }
+
+    private List<Planner> parseXlsFormat(InputStream fileInputStream) throws IOException {
+        List<Planner> planners = new ArrayList<>();
+
+        try (InputStream is = fileInputStream) {
+            HSSFWorkbook workbook = new HSSFWorkbook(is);
+            HSSFSheet sheet = workbook.getSheetAt(0);
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                HSSFRow row = sheet.getRow(i);
+
+                Planner planner = new Planner();
+
+                HSSFCell cell0 = row.getCell(0);
+                if (cell0 != null && cell0.getCellType() == CellType.NUMERIC) {
+                    planner.setId((long) cell0.getNumericCellValue());
+                } else {
+                    planner.setId(0L);
+                }
+                HSSFCell cell1 = row.getCell(1);
+                if (cell1 != null && cell1.getCellType() == CellType.STRING) {
+                	planner.setTMonth(cell1.getStringCellValue());
+                } else {
+                	planner.setTMonth( "N/A");
+                }
+                HSSFCell cell2 = row.getCell(2);
+                if (cell2 != null && cell2.getCellType() == CellType.STRING) {
+                	planner.setTDates(cell2.getStringCellValue());
+                } else {
+                	planner.setTDates( "N/A");
+                }
+                HSSFCell cell3= row.getCell(3);
+                if (cell3 != null && cell3.getCellType() == CellType.STRING) {
+                	planner.setTOrganisers(cell3.getStringCellValue());
+                } else {
+                	planner.setTOrganisers( "N/A");
+                }
+                HSSFCell cell4 = row.getCell(4);
+                if (cell4 !=null && cell4.getCellType()==CellType.STRING) {
+					planner.setTNames(cell4.getStringCellValue());
+				} else {
+					planner.setTNames( "N/A");
+				}
+                HSSFCell cell5 = row.getCell(5);
+                if (cell5 !=null && cell5.getCellType() == CellType.STRING) {
+					planner.setTSubjects(cell5.getStringCellValue());
+				} else {
+					planner.setTSubjects( "N/A");
+				}
+                HSSFCell cell6 = row.getCell(6);
+                if (cell6 !=null && cell6.getCellType() == CellType.STRING) {
+					planner.setTCategory(cell6.getStringCellValue());
+				} else {
+					planner.setTCategory("N/A");
+				}
+                HSSFCell cell7 = row.getCell(7);
+                if (cell7 !=null && cell7.getCellType() == CellType.STRING) {
+                	planner.setTSpell(cell7.getStringCellValue());
+                } else {
+                	planner.setTSpell("N/A");
+                }
+                HSSFCell cell8 = row.getCell(8);
+                if (cell8 !=null && cell8.getCellType() == CellType.STRING) {
+                	planner.setPreferredLocation(cell8.getStringCellValue());
+                } else {
+                	planner.setPreferredLocation("N/A");
+                }
+                HSSFCell cell9 = row.getCell(9);
+                if (cell9 !=null && cell9.getCellType() == CellType.STRING) {
+                	planner.setAttndGrades(cell9.getStringCellValue());
+                } else {
+                	planner.setAttndGrades("N/A");
+                }
+                HSSFCell cell10 = row.getCell(10);
+                if (cell10 !=null && cell10.getCellType() == CellType.STRING) {
+                	planner.setTargetGroup(cell10.getStringCellValue());
+                } else {
+                	planner.setTargetGroup("N/A");
+                }
+                HSSFCell cell11 = row.getCell(11);
+                if (cell11 !=null && cell11.getCellType() == CellType.NUMERIC) {
+                	planner.setNoOfStakeholders((int)cell11.getNumericCellValue());
+                } else {
+                	planner.setNoOfStakeholders(0);
+                }
+                HSSFCell cell12 = row.getCell(12);
+                if (cell12 !=null && cell12.getCellType() == CellType.STRING) {
+                	planner.setTDuration(cell12.getStringCellValue());
+                } else {
+                	planner.setTDuration("N/A");
+                }
+                HSSFCell cell13 = row.getCell(13);
+                if (cell13 !=null && cell13.getCellType() == CellType.STRING) {
+                	planner.setTHourPerDay(cell13.getStringCellValue());
+                } else {
+                	planner.setTHourPerDay("N/A");
+                }
+                HSSFCell cell14 = row.getCell(14);
+                if (cell14 !=null && cell14.getCellType() == CellType.STRING) {
+                	planner.setTotalHours(cell14.getStringCellValue());
+                } else {
+                	planner.setTotalHours("N/A");
+                }
+                HSSFCell cell15 = row.getCell(15);
+                if (cell15 !=null && cell15.getCellType() == CellType.STRING) {
+                	planner.setMode(cell15.getStringCellValue());
+                } else {
+                	planner.setMode("N/A");
+                }
+
+
+                planners.add(planner);
+            }
+
+            workbook.close();
+        }
+
+        return planners;
+    }    
+    
 
     private void uploadAndStoreCSV(InputStream fileInputStream) throws IOException {
         List<Planner> planners = parseCSV(fileInputStream);
