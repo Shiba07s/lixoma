@@ -36,7 +36,7 @@ public class SearchScheduleController {
 		
 		return ResponseEntity.ok(result);
 	}
-	@PostMapping(value = "/api/save", consumes = "application/x-www-form-urlencoded;charset=UTF-8")
+	@PostMapping(value = "/save", consumes = "application/x-www-form-urlencoded;charset=UTF-8")
 	public ResponseEntity<String> saveSchedule(@RequestParam MultiValueMap<String, String> formData) {
 	        try {
 	        	scheduleService.saveSchedule(formData);
@@ -45,6 +45,12 @@ public class SearchScheduleController {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error saving schedule");
 	        }
 	 }
+	
+	@GetMapping("/list")
+	public ResponseEntity<List<SearchSchedule>> getAllData(){
+		List<SearchSchedule> list = searchScheduleService.getAll();
+		return new ResponseEntity<>(list,HttpStatus.OK);
+	}
 	    
 //	 @PostMapping(value="/save", produces = {"application/json", "application/json"}
 //     ,  consumes = {"application/x-www-form-urlencoded"})

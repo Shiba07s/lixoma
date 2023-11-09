@@ -15,12 +15,18 @@ public class SearchScheduleServiceImpl implements SearchScheduleService {
 	
 	
 	@Autowired
-	SearchScheduleRepository SearchScheduleRepo;
+	 private SearchScheduleRepository searchScheduleRepo;
 
 	@Override
 	 public List<SearchSchedule> findByReferencrId(String ref_planner_id) {
-		List<SearchSchedule> findByRefId = SearchScheduleRepo.findByRefId(ref_planner_id);
+		List<SearchSchedule> findByRefId = searchScheduleRepo.findByRefId(ref_planner_id);
 		return findByRefId;
+	}
+
+	@Override
+	public List<SearchSchedule> getAll() {
+		// TODO Auto-generated method stub
+		return searchScheduleRepo.findAll();
 	}
 	 
 

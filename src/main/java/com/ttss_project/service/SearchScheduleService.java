@@ -6,6 +6,7 @@ import com.ttss_project.entities.SearchSchedule;
 
 
 public interface SearchScheduleService {
+	List<SearchSchedule> getAll();
 	
 	 
 	

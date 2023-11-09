@@ -7,4 +7,5 @@ import com.ttss_project.entities.Schedule;
 public interface ScheduleService {
 	Schedule saveSchedule(MultiValueMap<String, String> formData) ;
 
+
 }

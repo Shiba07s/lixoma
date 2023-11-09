@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
  <style>
@@ -63,29 +64,23 @@
             <th>Application End Date</th>
             <th>Training End Date</th>
         </tr>
-        <tr>
-            <td>TrainingRef001</td>
-            <td>Venue 1</td>
-            <td>Type A</td>
-            <td>In-Person</td>
-            <td>January</td>
-            <td>2023</td>
-            <td>Training A</td>
-            <td>Module A</td>
-            <td>Description A</td>
-            <td>Location A</td>
-            <td>A</td>
-            <td>Agency A</td>
-            <td>Coordinator A</td> 
-            <td>email@example.com</td>
-            <td>1234567890</td>
-            <td>Andhra Pradesh</td>
-            <td>Alluri District</td>
-            <td>Alluri Sitarama Raju</td>
-            <td>2023-01-01</td>
-            <td>2023-01-15</td>
-            <td>2023-01-31</td>
-        </tr>
+        <c:forEach var="training" items="${trainings}">
+              <tr>
+                  <td>${training.ref_planner_id }</td>
+                  <td>${training.tmonth }</td>
+                  <td>${training.tyear }</td>
+                  <td>${training.tname }</td>
+                  <td>${training.tmode }</td>
+                  <td>${training.tmodule }</td>
+                  <td>${training.tgrade }</td>
+                  <td>${training.tagency }</td>
+                  <td>${training.tdescription }</td>
+                  <td>${training.actual_start_dt }</td>
+                  <td>${training.actual_end_dt }</td>
+                  <td>${training.training_reg_start_dt }</td>
+                  <td>${training.training_reg_end_dt }</td>
+              </tr>
+           </c:forEach>
     </table>
 </body>
 </html>

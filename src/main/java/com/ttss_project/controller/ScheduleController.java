@@ -23,12 +23,12 @@ public String createSchedule2() {
 }
 	@RequestMapping("/viewSchedule")
 	public String viewSchedule() {
-		return "view_schedule";
+		return "view_schedule2";
 	}
 	 
 	@RequestMapping("/traineeNotification")
 	public String notification() {
-		return "trainee_notification";
+		return "trainee_notification2";
 	}
 	@RequestMapping("/applyTrainee")
 	public String applyTrainee() {
